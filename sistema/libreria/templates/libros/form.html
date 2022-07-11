@@ -1,0 +1,39 @@
+<form enctype="multipart/form-data" method="post">
+  {% csrf_token  %}
+  {% for campo in formulario %}
+    <div class="mb-3">
+      <label for="" class="form-label">{{ campo.label }}:</label>
+      <br>
+      {% if campo.field.widget.input_type == 'file' and campo.value %}
+       <img src="{{ MEDIA_URL }}/imagenes/{{ campo.value }}" width="100" alt="">
+      {% endif %}
+
+      {% if campo.name == "autor" %}
+      <select class="form-control" name="autor">
+        <option value="">Seleccione</option>
+        {% for autores in autor %}
+        {%if campo.value == autores.id%}
+        <option value="{{ campo.value  }}"selected> {{ autores.nombre }}</option>
+        {%else%}
+        <option value="{{ autores.id }}"> {{ autores.nombre }}</option>
+        {%endif%}
+        {% endfor %}
+        </select>
+      {%else%}
+      
+      <input type="{{ campo.field.widget.input_type }}"
+        class="form-control" 
+        name="{{ campo.name }}" 
+        id="" 
+        aria-describedby="helpId" 
+        placeholder="{{ campo.label }}"
+        value="{{ campo.value | default:'' }}">
+      {%endif%}
+
+    </div>
+    <div class="col-12 help-text"> {{ campo.errors }}  </div>
+    {% endfor %}
+
+    <input name="" id="" class="btn btn-success" type="submit" value="Enviar Información">
+    <a name="" id="" class="btn btn-primary" href="{% url 'libros' %}" role="button">Volver</a>
+</form>
